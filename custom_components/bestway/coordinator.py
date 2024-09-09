@@ -32,9 +32,8 @@ class BestwayUpdateCoordinator(DataUpdateCoordinator[BestwayApiResults]):
         so entities can quickly look up their data.
         """
         try:
-            async with asyncio.timeout(10):
-                await self.api.refresh_bindings()
-                return await self.api.fetch_data()
+            await self.api.refresh_bindings()
+            return await self.api.fetch_data()
         except Exception as err:
             _LOGGER.exception("Data update failed")
             raise UpdateFailed(f"Error communicating with API: {err}") from err
