@@ -431,7 +431,7 @@ class BestwayApi:
         """Make an API call to the specified URL, returning the response as a JSON object."""
         headers = dict(_HEADERS)
         headers["X-Gizwits-User-token"] = self._user_token
-        last_e=None
+        last_e = Exception("Somehow this wasnt replaced, something really went wrong")
         for retry in range(5):
             try:
                 async with asyncio.timeout(_TIMEOUT):
@@ -441,20 +441,22 @@ class BestwayApi:
                     # All API responses are encoded using JSON, however the headers often incorrectly
                     # state 'text/html' as the content type.
                     # We have to disable the check to avoid an exception.
-                    response_json: dict[str, Any] = await response.json(content_type=None)
+                    response_json: dict[str, Any] = await response.json(
+                        content_type=None
+                    )
                     return response_json
             except ClientResponseError as e:
-                _LOGGER.warn(f"attempt {retry} failed due to a HTTP error, trying again")
+                _LOGGER.warn(
+                    f"attempt {retry} failed due to a HTTP error, trying again"
+                )
                 last_e = e
             except TimeoutError as e:
                 _LOGGER.warn(f"attempt {retry} failed due to timing out, trying again")
                 last_e = e
             except Exception as e:
                 raise e
-            asyncio.sleep(10)
+            await asyncio.sleep(10)
         raise last_e
-                
-
 
     async def _do_control_post(
         self, device_id: str, **kwargs: int | str
@@ -468,7 +470,7 @@ class BestwayApi:
         """Make an API call to the specified URL, returning the response as a JSON object."""
         headers = dict(_HEADERS)
         headers["X-Gizwits-User-token"] = self._user_token
-        last_e = None
+        last_e = Exception("Somehow this wasnt replaced, something really went wrong")
         for retry in range(5):
             try:
                 async with asyncio.timeout(_TIMEOUT):
@@ -478,17 +480,21 @@ class BestwayApi:
                     # All API responses are encoded using JSON, however the headers often incorrectly
                     # state 'text/html' as the content type.
                     # We have to disable the check to avoid an exception.
-                    response_json: dict[str, Any] = await response.json(content_type=None)
+                    response_json: dict[str, Any] = await response.json(
+                        content_type=None
+                    )
                     return response_json
             except ClientResponseError as e:
-                _LOGGER.warn(f"attempt {retry} failed due to a HTTP error, trying again")
+                _LOGGER.warn(
+                    f"attempt {retry} failed due to a HTTP error, trying again"
+                )
                 last_e = e
             except TimeoutError as e:
                 _LOGGER.warn(f"attempt {retry} failed due to timing out, trying again")
                 last_e = e
             except Exception as e:
                 raise e
-            asyncio.sleep(10)
+            await asyncio.sleep(10)
         raise last_e
 
     @staticmethod
